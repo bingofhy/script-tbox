@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Plot</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body>
+    <img id="plot" src="/plot.png" alt="Real-Time Plot">
+    <button id="start-btn">Start</button>
+    <button id="stop-btn">Stop</button>
+    <button id="clear-btn">Clear</button>
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            socket.emit('start');
+        });
+
+        socket.on('update', (data) => {
+            document.getElementById('plot').src = '/plot.png?' + new Date().getTime();
+        });
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            socket.emit('start_process');
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', () => {
+            socket.emit('stop_process');
+        });
+
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            socket.emit('clear_file');
+        });
+    </script>
+</body>
+</html>
